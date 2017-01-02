@@ -1,0 +1,33 @@
+---
+- name: "enable Fedoras's EPEL RPM repository"
+  package:
+    name: epel-release
+    state: present
+  when: ansible_distribution == "CentOS" or ansible_distribution == "RedHat"
+
+- name: "enable WANdisco's git RPM repository for EL7"
+  package:
+    name: http://opensource.wandisco.com/centos/7/git/x86_64/wandisco-git-release-7-2.noarch.rpm
+    state: present
+  when: ansible_distribution_major_version == "7"
+
+- name: "enable WANdisco's git RPM repository for EL6"
+  package:
+    name: http://opensource.wandisco.com/centos/6/git/x86_64/wandisco-git-release-6-1.noarch.rpm
+    state: present
+  when: ansible_distribution_major_version == "6"
+
+- name: "requirements install"
+  package:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - python-pip
+    - fontconfig
+
+- name: "update git"
+  package:
+    name: git
+    state: latest
+  when: ansible_distribution_major_version == "7" or ansible_distribution_major_version == "6"
+

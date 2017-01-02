@@ -1,16 +1,7 @@
 ---
-- name: "enable EPEL"
-  package:
-    name: epel-release
-    state: present
-
-- name: "requirements install"
-  package:
-    name: "{{ item }}"
-    state: present
-  with_items:
-    - python-pip
-    - fontconfig
+- include: redhat.yml
+  when:
+    - ansible_os_family == "RedHat"
 
 - name: "powerline eggs install"
   pip:
