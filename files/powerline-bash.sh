@@ -8,7 +8,7 @@ if [ -n "${BASH_VERSION-}" ]; then
             grep -Po '^Location: \K(/.*)$' )"
         POWERLINE_BASH_SELECT=1
         POWERLINE_BASH_CONTINUATION=1
-        POWERLINE_CONFIG_PATHS="/etc/powerline,$HOME/.config/powerline"
+        POWERLINE_CONFIG_PATHS="$POWERLINE_PATH/powerline/config_files:/etc/powerline:$HOME/.config/powerline"
         source "$POWERLINE_PATH/powerline/bindings/bash/powerline.sh"
     fi
 fi
