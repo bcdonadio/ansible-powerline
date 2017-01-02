@@ -29,6 +29,9 @@
     - reload systemd
     - restart powerline
 
+- name: "ensure configuration is sane"
+  shell: powerline-lint
+
 - name: "bash config"
   copy:
     src: powerline-bash.sh
