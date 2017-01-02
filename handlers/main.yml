@@ -1,0 +1,9 @@
+---
+- name: reload systemd
+  shell: systemctl daemon-reload
+
+- name: restart powerline
+  service:
+    name: powerline
+    status: restarted
+

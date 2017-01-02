@@ -1,0 +1,20 @@
+---
+- name: "bring docker centos7 container up"
+  hosts: localhost
+  gather_facts: false
+  vars:
+    inventory:
+      - name: "centos7_1"
+        image: "chrismeyers/centos7"
+  roles:
+    - role: provision_docker
+      provision_docker_company: "ansible"
+      provision_docker_inventory: "{{ inventory }}"
+
+- name: "run powerline role"
+  hosts: docker_containers
+  vars:
+    ports: [ 22 ]
+  roles:
+    - role: powerline
+

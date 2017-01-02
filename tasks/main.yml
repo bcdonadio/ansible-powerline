@@ -1,0 +1,37 @@
+---
+- name: "pip and fonts install"
+  package:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - python-pip
+    - powerline-fonts
+
+- name: "powerline eggs install"
+  pip:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - powerline-status
+    - powerline-gitstatus
+
+- name: "sync powerline config"
+  synchronize:
+    src: powerline/
+    dest: /etc/powerline/
+
+- name: "systemd service unit install"
+  copy:
+    src: powerline.service
+    dest: /etc/systemd/system/powerline.service
+    state: present
+  notify:
+    - reload systemd
+    - restart powerline
+
+- name: "bash config"
+  copy:
+    src: powerline-bash.sh
+    dest: /etc/profile.d/powerline-bash.sh
+    mode: 0755
+
