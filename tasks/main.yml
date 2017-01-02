@@ -67,7 +67,7 @@
 - name: "ensure configuration is sane"
   shell: powerline-lint
 
-- name: "bash config"
+- name: "enable powerline for bash"
   copy:
     src: powerline-bash.sh
     dest: /etc/profile.d/powerline-bash.sh
