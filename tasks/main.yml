@@ -47,14 +47,6 @@
     - "powerline/themes/shell/default.json"
     - "powerline/colorschemes/default.json"
 
-- name: "systemd service unit install"
-  copy:
-    src: powerline.service
-    dest: /etc/systemd/system/powerline.service
-  notify:
-    - reload systemd
-    - restart powerline
-
 - name: "ensure configuration is sane"
   shell: powerline-lint
   changed_when: false
