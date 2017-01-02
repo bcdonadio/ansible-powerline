@@ -57,6 +57,7 @@
 
 - name: "ensure configuration is sane"
   shell: powerline-lint
+  changed_when: false
 
 - name: "enable powerline for bash"
   copy:
