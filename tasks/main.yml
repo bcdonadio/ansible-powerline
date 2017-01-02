@@ -1,11 +1,16 @@
 ---
-- name: "pip and fonts install"
+- name: "enable EPEL"
+  package:
+    name: epel-release
+    state: present
+
+- name: "requirements install"
   package:
     name: "{{ item }}"
     state: present
   with_items:
     - python-pip
-    - powerline-fonts
+    - fontconfig
 
 - name: "powerline eggs install"
   pip:
@@ -15,16 +20,46 @@
     - powerline-status
     - powerline-gitstatus
 
-- name: "sync powerline config"
-  synchronize:
-    src: powerline/
-    dest: /etc/powerline/
+- name: "ensure needed folders exists"
+  file:
+    dest: "{{ item }}"
+    state: directory
+  with_items:
+    - /usr/share/fonts/truetype
+    - /etc/powerline
+    - /etc/powerline/themes
+    - /etc/powerline/themes/shell
+    - /etc/powerline/colorschemes
+
+- name: "fonts download"
+  get_url:
+    url: "{{ item.url }}"
+    dest: "{{ item.dest }}"
+  with_items:
+    - url: "https://github.com/powerline/powerline/raw/develop/font/PowerlineSymbols.otf"
+      dest: /usr/share/fonts/truetype/PowerlineSymbols.otf
+    - url: "https://github.com/powerline/powerline/raw/develop/font/10-powerline-symbols.conf"
+      dest: /usr/share/fontconfig/conf.avail/10-powerline-symbols.conf
+
+- name: "fonts install"
+  file:
+    src: /usr/share/fontconfig/conf.avail/10-powerline-symbols.conf
+    dest: /etc/fonts/conf.d/10-powerline-symbols.conf
+    state: link
+
+- name: "copy powerline config"
+  copy:
+    src: "{{ item }}"
+    dest: "/etc/{{ item }}"
+  with_items:
+    - "powerline/config.json"
+    - "powerline/themes/shell/default.json"
+    - "powerline/colorschemes/default.json"
 
 - name: "systemd service unit install"
   copy:
     src: powerline.service
     dest: /etc/systemd/system/powerline.service
-    state: present
   notify:
     - reload systemd
     - restart powerline
